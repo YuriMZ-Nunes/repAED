@@ -10,7 +10,7 @@ int minutos(char * tempo);
 int main(){
     
     char **evento1[2][5] = {"01:15", "02:00"};
-    char **evento2[2][5] = {"02:00", "03:00"};
+    char **evento2[2][5] = {"02:30", "03:00"};
 
     int evento1tamanho = 2;
     int evento2tamanho = 2;
@@ -37,7 +37,6 @@ bool haveConflict(char ** evento1, int evento1tamanho,char ** evento2, int event
         return false;
 
     return true;
-    
 }
 
 //transforma para inteiro
@@ -48,7 +47,6 @@ int transformarInt(char * tempo){
             transf = transf * 10 + (tempo[i] - '0');
         }
     }
-
     return transf;
 }
 
