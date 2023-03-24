@@ -19,7 +19,7 @@ int main(){
     *pFirst = NULL;
 
     while(1){
-        printf("\n1. ADD\n2. DELETE\n3. SEARCH\n4. LIST\n5. EXIT\n");
+        printf("\n\n1. ADD\n2. DELETE\n3. SEARCH\n4. LIST\n5. EXIT\n");
         switch(getchar()){
             case '1':
                 push(pFirst, pCurrent, pPrev);
@@ -30,6 +30,7 @@ int main(){
                 getchar();
                 break;
             case '3':
+                search(pFirst, pCurrent);
                 getchar();
                 break;
             case '4':
@@ -89,11 +90,11 @@ void *push(void **pFirst, void **pCurrent, void **pPrev){
 void *pop(void **pFirst){
     void *delete;
 
-    if(pFirst){
+    if(*pFirst != NULL){
         delete = *(void **)pFirst;
         if(*(int *)(*pFirst + NEXT) == 0){
             free(delete);
-            printf("\n--Nó removido--");
+            printf("\n--No removido--");
             *pFirst = NULL;
             return 0;
         }
@@ -101,11 +102,35 @@ void *pop(void **pFirst){
         *(int *)pFirst = *(int *)(*pFirst + NEXT);
         *(int *)(*pFirst + PREV) = 0;
         free(delete);
-        printf("\n--Nó removido--");
+        printf("\n--No removido--");
     }
+    printf("\nNao ha nada para deletar. ");
     return 0;
 }
 
+void *search(void **pFirst, void **pCurrent){
+    char *name = malloc(sizeof(char) * 10);
+
+    printf("\nDigite o nome que deseja buscar: ");
+    scanf("%s", name);
+
+    *pCurrent = *pFirst;
+
+    while(*(int *)pCurrent){
+        if(strcmp((char *)*pCurrent, (char *)name) == 0){
+            printf("\nO(A) %s esta cadastrado(a) e aqui estao seus dados: \n", (char *)*pCurrent);
+            printf("\nNome: %s", (char *)*pCurrent);
+            printf("\nIdade: %d", *(int *)(*pCurrent + sizeof(char) * 10));
+            printf("\nTelefone: %d", *(int *)(*pCurrent + (sizeof(char) * 10) + sizeof(int)));
+            free(name);
+            return 0;
+        }
+        *(int *)pCurrent = *(int *)(*pCurrent + NEXT);
+    }
+    printf("\n%s nao esta cadastrado.\n", name);
+    free(name);
+    return 0;
+}
 
 void *list(void **pFirst, void **pCurrent){
     *pCurrent = *pFirst;
@@ -116,7 +141,7 @@ void *list(void **pFirst, void **pCurrent){
         printf("\nIdade: %d", *(int *)(*pCurrent + sizeof(char) * 10));
         printf("\nTelefone: %d", *(int *)(*pCurrent + (sizeof(char) * 10) + sizeof(int)));
 
-        *(int *)pCurrent = *(int *)(*pCurrent + (sizeof(char) * 10) + (sizeof(int) * 2));
+        *(int *)pCurrent = *(int *)(*pCurrent + NEXT);
     }
     return 0;
 }
